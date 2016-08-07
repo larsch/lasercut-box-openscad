@@ -1,34 +1,22 @@
-// Display options:
-
-explode = 0; // 3d explosion
 front_color = "RoyalBlue";
 back_color = "RoyalBlue";
 bottom_color = "SlateBlue";
 top_color = "SlateBlue";
 left_color = "MediumAquamarine";
 right_color = "MediumAquamarine";
-
-// Cutting options:
-
-kerf = 0.3; // Kerf width (cuts will be offset by half this)
-labels = false;
-
-// Examples:
-
-// box(width = 130, height = 150, depth = 170, thickness = 4);
-// box(width = 130, height = 150, depth = 170, thickness = 4, open = true, inset = 8);
-// lidbox(width = 130, height = 150, depth = 170, thickness = 4);
-
-// box2d();
-
-// Internals:
-
 e = 0.01;
-kc = kerf / 2;
 
-module box(width, height, depth, thickness, finger_width, finger_margin,
-	   open = false, inset = 0, assemble = false,
-     hole_width = false) {
+module box(width, height, depth, thickness,
+	   finger_width, // (default = 2 * thickness)
+	   finger_margin, // (default = 2 * thickness)
+	   open = false,
+	   inset = 0,
+	   assemble = false,
+	   hole_width = false,
+	   kerf = 0.0,
+	   labels = false,
+	   explode = 0)
+{
   w = width;
   h = height;
   d = depth;
@@ -37,7 +25,12 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
   fm = (finger_margin == undef) ? thickness * 2 : finger_margin;
   fw = (finger_width == undef) ? thickness * 2 : finger_width;
   keep_top = !open;
+  kc = kerf / 2;
 
+  // Kerf compensation modifier
+  module compkerf() { offset(delta = kc) children(); }
+
+  // 2D panels with finger cuts
   module left() { cut_left() panel2d(d, h); }
   module right() { cut_right() panel2d(d, h); }
   module top() { cut_top() panel2d(w, d); }
@@ -45,6 +38,7 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
   module back() { cut_back() panel2d(w, h); }
   module front() { cut_front() panel2d(w, h); }
 
+  // Panels positioned in 3D
   module front3d() {
     translate([0,t-explode,0])
       rotate(90, [1,0,0])
@@ -89,6 +83,7 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
       right();
   }
 
+  // Panelized 2D rendering for cutting
   module box2d() {
     compkerf() front();
     x1 = w + kc * 2 + e;
@@ -106,6 +101,7 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
     }
   }
 
+  // Assembled box in 3D
   module box3d() {
     front3d(w, h, d);
     back3d(w, h, d);
@@ -116,6 +112,7 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
     right3d();
   }
 
+  // Finger cutting operators
   module cut_front() {
     difference() {
       children();
@@ -123,15 +120,7 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
       if (keep_top) movecutstop(w, h) cuts(w);
       movecutsleft(w, h) cuts(h);
       movecutsright(w, h) cuts(h);
-      if (hole_width) {
-	   r = hole_height / 2;
-	   hull() {
-		translate([w/2 - hole_width/2 + r, h - hole_margin - r])
-		     circle(r = r);
-		translate([w/2 + hole_width/2 - r, h - hole_margin - r])
-		     circle(r = r);
-	   }
-      }
+      holecuts();
     }
   }
 
@@ -159,6 +148,20 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
   module cut_right() { cut_left() children(); }
   module cut_back() { cut_front() children(); }
 
+  // Handle hole
+  module holecuts() {
+    if (hole_width) {
+      r = hole_height / 2;
+      hull() {
+	translate([w/2 - hole_width/2 + r, h - hole_margin - r])
+	  circle(r = r);
+	translate([w/2 + hole_width/2 - r, h - hole_margin - r])
+	  circle(r = r);
+      }
+    }
+  }
+
+  // Finger cuts (along x axis)
   module cuts(tw, li = 0, ri = 0) {
     w = tw - li - ri;
     innerw = w - t*2 - 2 * fm;
@@ -187,6 +190,15 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
     }
   }
 
+  // Inverse finger cuts (along x axis)
+  module invcuts(w, li = 0, ri = 0) {
+    difference() {
+      translate([-2*e,-e]) square([w+4*e,t+e]);
+      cuts(w, li, ri);
+    }
+  }
+
+  // Finger cut positioning operators
   module movecutstop(w, h) {
     translate([w,h,0])
       rotate(180,[0,0,1])
@@ -207,13 +219,7 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
       children();
   }
 
-  module invcuts(w, li = 0, ri = 0) {
-    difference() {
-      translate([-2*e,-e]) square([w+4*e,t+e]);
-      cuts(w, li, ri);
-    }
-  }
-
+  // Turn 2D Panel into 3D
   module panelize(x, y, name, cl) {
     color(cl)
       linear_extrude(height = t)
@@ -234,7 +240,3 @@ module box(width, height, depth, thickness, finger_width, finger_margin,
   else
     box2d();
 }
-
-
-// Kerf compensation modifier
-module compkerf() { offset(delta = kc) children(); }
