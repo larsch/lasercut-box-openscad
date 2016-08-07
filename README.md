@@ -22,6 +22,7 @@ box(options);
  * hole_width - Width of handle hole
  * hole_height - Height of handle hole
  * hole_margin - Distance from top edge to handle hole
+ * kerf (diameter) - Cutting kerf (rendering will be offset by half this)
 
 ## Examples
 
