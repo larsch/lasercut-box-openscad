@@ -11,6 +11,7 @@ module box(width, height, depth, thickness,
 	   finger_margin, // (default = 2 * thickness)
 	   open = false,
 	   inset = 0,
+	   dividers = [ 0, 0 ],
 	   assemble = false,
 	   hole_width = false,
 	   kerf = 0.0,
@@ -37,6 +38,7 @@ module box(width, height, depth, thickness,
   module bottom() { cut_bottom() panel2d(w, d); }
   module back() { cut_back() panel2d(w, h); }
   module front() { cut_front() panel2d(w, h); }
+  module w_divider() { cut_w_divider() panel2d(w, h); }
 
   // Panels positioned in 3D
   module front3d() {
@@ -83,6 +85,17 @@ module box(width, height, depth, thickness,
       right();
   }
 
+  module w_divider3d() {
+    if (dividers[0] > 0) {
+      ndivs = dividers[0]+1;
+      for (i = [d/ndivs : d/ndivs : d-d/ndivs])
+        translate([0,i+t/2,0])
+        rotate(90, [1,0,0])
+        panelize(w,h, "Divider", front_color)
+        w_divider();
+    }
+  }
+
   // Panelized 2D rendering for cutting
   module box2d() {
     compkerf() front();
@@ -110,6 +123,7 @@ module box(width, height, depth, thickness,
       top3d();
     left3d();
     right3d();
+    w_divider3d();
   }
 
   // Finger cutting operators
@@ -120,6 +134,26 @@ module box(width, height, depth, thickness,
       if (keep_top) movecutstop(w, h) cuts(w);
       movecutsleft(w, h) cuts(h);
       movecutsright(w, h) cuts(h);
+      if (dividers[1] > 0) {
+        ndivs = dividers[1]+1;
+        for (i = [w/ndivs : w/ndivs : w-w/ndivs])
+          movecuts(i+t/2, 0) cuts(h, li = thickness*2);
+      }
+      holecuts();
+    }
+  }
+
+  module cut_w_divider() {
+    difference() {
+      children();
+      //translate([0,inset]) cuts(w);
+      movecutsleft(w, h) invcuts(h, ri = thickness*2);
+      movecutsright(w, h) invcuts(h, li = thickness*2);
+      if (dividers[1] > 0) {
+        ndivs = dividers[1]+1;
+        for (i = [w/ndivs : w/ndivs : w-w/ndivs])
+          movecuts(i+t/2, 0) cuts(h, li = thickness*2);
+      }
       holecuts();
     }
   }
@@ -141,6 +175,11 @@ module box(width, height, depth, thickness,
       if (keep_top) movecutstop(d, h) translate([t,0]) cuts(d-2*t);
       movecutsleft(d, h) invcuts(h);
       movecutsright(d, h) invcuts(h);
+      if (dividers[0] > 0) {
+        ndivs = dividers[0]+1;
+        for (i = [d/ndivs : d/ndivs : d-d/ndivs])
+          movecuts(i-t/2, 0) cuts(h, li = thickness*2);
+      }
     }
   }
 
@@ -162,7 +201,7 @@ module box(width, height, depth, thickness,
   }
 
   // Finger cuts (along x axis)
-  module cuts(tw, li = 0, ri = 0) {
+  module cuts(tw, li = 0, ri = 0, full = false) {
     w = tw - li - ri;
     innerw = w - t*2 - 2 * fm;
     tc1 = floor((innerw / fw - 1) / 2);
@@ -191,10 +230,10 @@ module box(width, height, depth, thickness,
   }
 
   // Inverse finger cuts (along x axis)
-  module invcuts(w, li = 0, ri = 0) {
+  module invcuts(w, li = 0, ri = 0, full = true) {
     difference() {
       translate([-2*e,-e]) square([w+4*e,t+e]);
-      cuts(w, li, ri);
+      cuts(w, li, ri, full);
     }
   }
 
@@ -214,6 +253,13 @@ module box(width, height, depth, thickness,
 
   module movecutsright(w, h) {
     translate([w-t,0])
+      rotate(90,[0,0,1])
+      translate([0,-t])
+      children();
+  }
+
+  module movecuts(w, h) {
+    translate([w, h])
       rotate(90,[0,0,1])
       translate([0,-t])
       children();
