@@ -12,6 +12,7 @@ module box(width, height, depth, thickness,
 	   open = false,
 	   inset = 0,
 	   dividers = [ 0, 0 ],
+	   ears = false,
 	   assemble = false,
 	   hole_width = false,
 	   kerf = 0.0,
@@ -27,6 +28,7 @@ module box(width, height, depth, thickness,
   fw = (finger_width == undef) ? thickness * 2 : finger_width;
   keep_top = !open;
   kc = kerf / 2;
+  ears_radius = ears;
 
   // Kerf compensation modifier
   module compkerf() { offset(delta = kc) children(); }
@@ -36,9 +38,38 @@ module box(width, height, depth, thickness,
   module right() { cut_right() panel2d(d, h); }
   module top() { cut_top() panel2d(w, d); }
   module bottom() { cut_bottom() panel2d(w, d); }
-  module back() { cut_back() panel2d(w, h); }
-  module front() { cut_front() panel2d(w, h); }
-  module w_divider() { cut_w_divider() panel2d(w, h); }
+  module ears_outer(is_front) {
+    translate([is_front ? 0 : w, h]) 
+        circle(ears_radius, [0, 0]);
+  }
+  module ears_inner(is_front) {
+    translate([is_front ? 0 : w, h])
+      circle(ears_radius-2, [0, 0]);
+  }
+  module back() {
+    cut_back() difference() {
+      union() {
+        panel2d(w, h);
+        if (ears_radius > 0)
+          ears_outer(false);
+      }
+      if (ears_radius > 0)
+        ears_inner(false);
+    }
+  }
+  module front() {
+    cut_front() difference() {
+      union()
+      {
+        panel2d(w, h); 
+        if (ears_radius > 0)
+          ears_outer(true);
+      }
+      if (ears_radius > 0)
+        ears_inner(true);
+      }      
+  }
+  module w_divider() { cut_w_divider() translate([0, t, 0]) panel2d(w, h-t); }
 
   // Panels positioned in 3D
   module front3d() {
@@ -96,22 +127,33 @@ module box(width, height, depth, thickness,
     }
   }
 
+  module w_dividers() {
+    if (dividers[0] > 0) {
+      ndivs = dividers[0];
+      for (i = [0 : 1 : ndivs-1])
+        translate([i*(w+e),0,0])
+        w_divider();
+    }
+  }
+
   // Panelized 2D rendering for cutting
   module box2d() {
     compkerf() front();
     x1 = w + kc * 2 + e;
     translate([x1,0]) compkerf() back();
-    x2 = x1 + w + 2 * kc + e;
+    x2 = x1 + w + 2 * kc + e + ears_radius;
     translate([x2,0]) compkerf() left();
     x3 = x2 + d + 2 * kc + e;
     translate([x3,0]) compkerf() right();
-    y1 = h + kc * 2 + e;
+    y1 = h + kc * 2 + e + ears_radius;
     x4 = 0;
     translate([x4,y1]) compkerf() bottom();
     if (keep_top) {
 	 x5 = w + 2 * kc + e;
 	 translate([x5,y1]) compkerf() top();
     }
+    x6 = w + 2 * kc + (keep_top ? w+e : 0) + e;
+    translate([x6,y1]) compkerf() w_dividers();
   }
 
   // Assembled box in 3D
