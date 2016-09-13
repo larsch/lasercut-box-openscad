@@ -29,6 +29,7 @@ module box(width, height, depth, thickness,
   keep_top = !open;
   kc = kerf / 2;
   ears_radius = ears;
+  ears_width = 3;
 
   // Kerf compensation modifier
   module compkerf() { offset(delta = kc) children(); }
@@ -36,7 +37,17 @@ module box(width, height, depth, thickness,
   // 2D panels with finger cuts
   module left() { cut_left() panel2d(d, h); }
   module right() { cut_right() panel2d(d, h); }
-  module top() { cut_top() panel2d(w, d); }
+  module top() { 
+    if (ears_radius > 0) {
+      difference() {
+        panel2d(w, d);
+        translate([t, d-t+e]) panel2d(2*t, t);
+        translate([t, -e]) panel2d(2*t, t);
+      }
+    } else {
+      cut_top() panel2d(w, d);
+    }
+  }
   module bottom() { cut_bottom() panel2d(w, d); }
   module ears_outer(is_front) {
     translate([is_front ? 0 : w, h]) 
@@ -44,7 +55,10 @@ module box(width, height, depth, thickness,
   }
   module ears_inner(is_front) {
     translate([is_front ? 0 : w, h])
-      circle(ears_radius-2, [0, 0]);
+      difference() {
+        circle(ears_radius-ears_width, [0, 0]);
+        square([t, t]);
+      }
   }
   module back() {
     cut_back() difference() {
@@ -95,7 +109,7 @@ module box(width, height, depth, thickness,
   }
 
   module top3d() {
-    translate([0,0,h-t+explode])
+    translate([0, 0, h-t+explode+(ears_radius > 0 ? t : 0)])
       panelize(w, d, "Top", top_color)
       top();
   }
@@ -149,8 +163,8 @@ module box(width, height, depth, thickness,
     x4 = 0;
     translate([x4,y1]) compkerf() bottom();
     if (keep_top) {
-	 x5 = w + 2 * kc + e;
-	 translate([x5,y1]) compkerf() top();
+      x5 = w + 2 * kc + e;
+      translate([x5,y1]) compkerf() top();
     }
     x6 = w + 2 * kc + (keep_top ? w+e : 0) + e;
     translate([x6,y1]) compkerf() w_dividers();
@@ -173,7 +187,7 @@ module box(width, height, depth, thickness,
     difference() {
       children();
       translate([0,inset]) cuts(w);
-      if (keep_top) movecutstop(w, h) cuts(w);
+      if (keep_top && (ears_radius == 0)) movecutstop(w, h) cuts(w);
       movecutsleft(w, h) cuts(h);
       movecutsright(w, h) cuts(h);
       if (dividers[1] > 0) {
@@ -214,7 +228,7 @@ module box(width, height, depth, thickness,
     difference() {
       children();
       translate([t,inset]) cuts(d-2*t);
-      if (keep_top) movecutstop(d, h) translate([t,0]) cuts(d-2*t);
+      if (keep_top && (ears_radius == 0)) movecutstop(d, h) translate([t,0]) cuts(d-2*t);
       movecutsleft(d, h) invcuts(h);
       movecutsright(d, h) invcuts(h);
       if (dividers[0] > 0) {
