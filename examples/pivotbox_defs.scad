@@ -18,6 +18,8 @@ top_dividers = [ 1, 0 ];
 middle_dividers = [ 2, 0 ];
 // Dividers in bottom box: One along depth
 bottom_dividers = [ 0, 1 ];
+// Width of connecting rods
+rod_width = 10;
 
 // To make circles sufficiently smooth
 $fn = 50;
