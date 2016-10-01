@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Render assembled boxes as PNG
+openscad -o pivotbox_bottom.png -D assemble=true pivotbox_bottom.scad
+openscad -o pivotbox_middle.png -D assemble=true pivotbox_middle.scad
+openscad -o pivotbox_top.png -D assemble=true pivotbox_top.scad
+
+# Render unassembled boxes as SVG
+openscad -o pivotbox_bottom.svg -D assemble=false pivotbox_bottom.scad
+openscad -o pivotbox_middle.svg -D assemble=false pivotbox_middle.scad
+openscad -o pivotbox_top.svg -D assemble=false pivotbox_top.scad
