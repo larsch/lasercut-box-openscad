@@ -12,7 +12,8 @@ module box(width, height, depth, thickness,
 	   open = false,
 	   inset = 0,
 	   dividers = [ 0, 0 ],
-           holes = [],
+       holes = [],
+       hole_dia = 0,
 	   ears = 0,
 	   assemble = false,
 	   hole_width = false,
@@ -76,7 +77,7 @@ module box(width, height, depth, thickness,
     }
   }
   module hole(center) {
-    translate(center) circle(d = 3);
+    translate(center) circle(d = hole_dia);
   }
   module front() {
     cut_front() difference() {

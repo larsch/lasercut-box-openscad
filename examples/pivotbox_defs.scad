@@ -10,6 +10,8 @@ h = 50;
 d = 150;
 // Distance between holes. Larger values make the box open wider
 hole_dist = 50;
+// Hole diameter. Use filament rivets (http://makezine.com/2016/04/05/pro-tip-use-filament-add-simple-rivets-and-hinges-to-3d-prints/) for assembly.
+hole_dia = 3;
 // Dividers in each top box: One along width
 top_dividers = [ 1, 0 ];
 // Dividers in each middle box: Two along width
