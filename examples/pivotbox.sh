@@ -1,7 +1,7 @@
 #!/bin/sh
 
 OS=$( uname )
-if [ $OS="Darwin" ]; then
+if [ "$OS" = "Darwin" ]; then
         alias openscad='/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
 fi
 
