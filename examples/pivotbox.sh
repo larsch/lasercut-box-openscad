@@ -1,5 +1,10 @@
 #!/bin/sh
 
+OS=$( uname )
+if [ "$OS" = "Darwin" ]; then
+        alias openscad='/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
+fi
+
 # Render assembled boxes as PNG
 openscad -o pivotbox_bottom.png -D assemble=true pivotbox_bottom.scad
 openscad -o pivotbox_middle.png -D assemble=true pivotbox_middle.scad
