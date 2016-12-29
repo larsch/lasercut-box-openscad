@@ -202,7 +202,7 @@ module box(width, height, depth, thickness,
     }
     x6 = w + 2 * kc + (keep_top ? w+e : 0) + e;
     translate([x6,y1]) compkerf() w_dividers();
-    translate([x6,y1]) compkerf() h_dividers();
+    translate([x6,y1 + (dividers[0] > 0 ? y1 : 0)]) compkerf() h_dividers();
   }
 
   // Assembled box in 3D
@@ -240,11 +240,10 @@ module box(width, height, depth, thickness,
       children();
       movecutsleft(w, h) invcuts(h, ri = thickness*2);
       movecutsright(w, h) invcuts(h, li = thickness*2);
-      // Holes in dividers - not usable yet
       if (dividers[1] > 0) {
         ndivs = dividers[1]+1;
         for (i = [w/ndivs : w/ndivs : w-w/ndivs])
-          movecuts(i+t/2, 0) cuts(h, li = thickness*2);
+          movecuts(i-t/2, h/2) square([h / 2, thickness]);
       }
       holecuts();
     }
@@ -255,11 +254,10 @@ module box(width, height, depth, thickness,
       children();
       movecutsleft(d, h) invcuts(h, ri = thickness*2);
       movecutsright(d, h) invcuts(h, li = thickness*2);
-      // Holes in dividers - not usable yet
       if (dividers[0] > 0) {
-        ndivs = dividers[1]+1;
+        ndivs = dividers[0]+1;
         for (i = [d/ndivs : d/ndivs : d-d/ndivs])
-          movecuts(i+t/2, 0) cuts(h, li = thickness*2);
+          movecuts(i-t/2, 0) square([h / 2, thickness]);
       }
       holecuts();
     }
