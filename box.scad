@@ -1,3 +1,5 @@
+w_divider_color="CadetBlue";
+h_divider_color="CornflowerBlue";
 front_color = "RoyalBlue";
 back_color = "RoyalBlue";
 bottom_color = "SlateBlue";
@@ -149,7 +151,7 @@ module box(width, height, depth, thickness,
       for (i = [d/ndivs : d/ndivs : d-d/ndivs])
         translate([0,i+t/2,0])
         rotate(90, [1,0,0])
-        panelize(w,h, "Divider", front_color)
+        panelize(w,h, "Divider", w_divider_color)
         w_divider();
     }
   }
@@ -161,7 +163,7 @@ module box(width, height, depth, thickness,
         translate([i-t/2,0,0])
         rotate(90, [1,0,0])
         rotate(90, [0,1,0])
-        panelize(d,h, "Divider", front_color)
+        panelize(d,h, "Divider", h_divider_color)
         h_divider();
     }
   }
