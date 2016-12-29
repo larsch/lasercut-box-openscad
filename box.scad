@@ -7,19 +7,19 @@ right_color = "MediumAquamarine";
 e = 0.01;
 
 module box(width, height, depth, thickness,
-	   finger_width, // (default = 2 * thickness)
-	   finger_margin, // (default = 2 * thickness)
-	   open = false,
-	   inset = 0,
-	   dividers = [ 0, 0 ],
-       holes = [],
-       hole_dia = 0,
-	   ears = 0,
-	   assemble = false,
-	   hole_width = false,
-	   kerf = 0.0,
-	   labels = false,
-	   explode = 0)
+           finger_width, // (default = 2 * thickness)
+           finger_margin, // (default = 2 * thickness)
+           open = false,
+           inset = 0,
+           dividers = [ 0, 0 ],
+           holes = [],
+           hole_dia = 0,
+           ears = 0,
+           assemble = false,
+           hole_width = false,
+           kerf = 0.0,
+           labels = false,
+           explode = 0)
 {
   w = width;
   h = height;
@@ -299,10 +299,10 @@ module box(width, height, depth, thickness,
     if (hole_width) {
       r = hole_height / 2;
       hull() {
-	translate([w/2 - hole_width/2 + r, h - hole_margin - r])
-	  circle(r = r);
-	translate([w/2 + hole_width/2 - r, h - hole_margin - r])
-	  circle(r = r);
+        translate([w/2 - hole_width/2 + r, h - hole_margin - r])
+          circle(r = r);
+        translate([w/2 + hole_width/2 - r, h - hole_margin - r])
+          circle(r = r);
       }
     }
   }
@@ -329,10 +329,10 @@ module box(width, height, depth, thickness,
 
     if (tw >= 3 * fw_minimum) {
       translate([li,0])
-	for (i = [0:tc]) {
-	  translate([x+i*stepsize*2,-e])
-	    square([stepsize, t+e]);
-	}
+        for (i = [0:tc]) {
+          translate([x+i*stepsize*2,-e])
+            square([stepsize, t+e]);
+        }
     }
   }
 
@@ -376,11 +376,11 @@ module box(width, height, depth, thickness,
   module panelize(x, y, name, cl) {
     color(cl)
       linear_extrude(height = t)
-	 children();
+         children();
     if (labels) {
-	 color("Yellow")
-	      translate([x/2,y/2,t+1])
-	      text(text = name, halign = "center", valign="center");
+         color("Yellow")
+              translate([x/2,y/2,t+1])
+              text(text = name, halign = "center", valign="center");
     }
   }
 
