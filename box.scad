@@ -204,7 +204,7 @@ module box(width, height, depth, thickness,
     }
     x6 = w + 2 * kc + (keep_top ? w+e : 0) + e;
     translate([x6,y1]) compkerf() w_dividers();
-    translate([x6,y1 + (dividers[0] > 0 ? y1 : 0)]) compkerf() h_dividers();
+    translate([x6+kerf,y1 + (dividers[0] > 0 ? y1 : 0)]) compkerf() h_dividers();
   }
 
   // Assembled box in 3D
