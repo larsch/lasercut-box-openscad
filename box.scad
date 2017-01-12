@@ -1,5 +1,5 @@
-w_divider_color="CadetBlue";
-h_divider_color="CornflowerBlue";
+w_divider_color = "CadetBlue";
+h_divider_color = "CornflowerBlue";
 front_color = "RoyalBlue";
 back_color = "RoyalBlue";
 bottom_color = "SlateBlue";
@@ -55,14 +55,14 @@ module box(width, height, depth, thickness,
   module bottom() { cut_bottom() panel2d(w, d); }
   module ears_outer(is_front) {
     translate([is_front ? 0 : w, h]) 
-        circle(ears_radius, [0, 0]);
+      circle(ears_radius, [0, 0]);
   }
   module ears_inner(is_front) {
     translate([is_front ? 0 : w, h])
       difference() {
-        circle(ears_radius-ears_width, [0, 0]);
-        square([t, t]);
-      }
+      circle(ears_radius-ears_width, [0, 0]);
+      square([t, t]);
+    }
   }
   module back() {
     cut_back() difference() {
@@ -94,7 +94,7 @@ module box(width, height, depth, thickness,
           hole(holes[i]);
       if (ears_radius > 0)
         ears_inner(true);
-      }
+    }
   }
 
   module w_divider() { cut_w_divider() translate([0, t, 0]) panel2d(w, h-t); }
@@ -150,9 +150,9 @@ module box(width, height, depth, thickness,
       ndivs = dividers[0]+1;
       for (i = [d/ndivs : d/ndivs : d-d/ndivs])
         translate([0,i+t/2,0])
-        rotate(90, [1,0,0])
-        panelize(w,h, "Divider", w_divider_color)
-        w_divider();
+	  rotate(90, [1,0,0])
+	  panelize(w,h, "Divider", w_divider_color)
+	  w_divider();
     }
   }
 
@@ -161,10 +161,10 @@ module box(width, height, depth, thickness,
       ndivs = dividers[1]+1;
       for (i = [w/ndivs : w/ndivs : w-w/ndivs])
         translate([i-t/2,0,0])
-        rotate(90, [1,0,0])
-        rotate(90, [0,1,0])
-        panelize(d,h, "Divider", h_divider_color)
-        h_divider();
+	  rotate(90, [1,0,0])
+	  rotate(90, [0,1,0])
+	  panelize(d,h, "Divider", h_divider_color)
+	  h_divider();
     }
   }
 
@@ -173,7 +173,7 @@ module box(width, height, depth, thickness,
       ndivs = dividers[0];
       for (i = [0 : 1 : ndivs-1])
         translate([i*(w+e),0,0])
-        w_divider();
+	  w_divider();
     }
   }
 
@@ -182,7 +182,7 @@ module box(width, height, depth, thickness,
       ndivs = dividers[1];
       for (i = [0 : 1 : ndivs-1])
         translate([i*(d+e),0,0])
-        h_divider();
+	  h_divider();
     }
   }
 
@@ -376,11 +376,11 @@ module box(width, height, depth, thickness,
   module panelize(x, y, name, cl) {
     color(cl)
       linear_extrude(height = t)
-         children();
+      children();
     if (labels) {
-         color("Yellow")
-              translate([x/2,y/2,t+1])
-              text(text = name, halign = "center", valign="center");
+      color("Yellow")
+	translate([x/2,y/2,t+1])
+	text(text = name, halign = "center", valign="center");
     }
   }
 
