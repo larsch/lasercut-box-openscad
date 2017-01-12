@@ -1,4 +1,4 @@
-include <box.scad>
+include <../box.scad>
 width = 150;
 height = 100;
 depth = 200;

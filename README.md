@@ -23,6 +23,10 @@ box(options);
  * hole_height - Height of handle hole
  * hole_margin - Distance from top edge to handle hole
  * kerf (diameter) - Cutting kerf (rendering will be offset by half this)
+ * dividers (array with two elements) - How many dividers to insert in X and Y directions
+ * holes (array) - Where to place rivet holes
+ * hole_dia (length) - Diameter of rivet holes
+ * ears (boolean) - If true, 'ears' for hinges are generated
 
 ## Examples
 
