@@ -11,6 +11,7 @@ e = 0.01;
 module box(width, height, depth, thickness,
            finger_width, // (default = 2 * thickness)
            finger_margin, // (default = 2 * thickness)
+	   inner = false,
            open = false,
            inset = 0,
            dividers = [ 0, 0 ],
@@ -24,9 +25,9 @@ module box(width, height, depth, thickness,
            explode = 0,
 	   spacing = 0)
 {
-  w = width;
-  h = height;
-  d = depth;
+  w = inner ? width + 2 * thickness : width;
+  h = inner ? height + 2 * thickness : height;
+  d = inner ? depth + 2 * thickness : depth;
   t = thickness;
   hm = h - inset;
   fm = (finger_margin == undef) ? thickness * 2 : finger_margin;

@@ -16,6 +16,7 @@ box(options);
  * width (length) - outer width of box
  * height (length) - outer height of box
  * depth (length) - outer depth of box
+ * inner (boolean) - width/height/depth are inner dimensions
  * thickness (length) - material thickness
  * finger_width (length) - target finger width
  * finger_margin (length) - distance from inside edge to first finger
@@ -39,6 +40,13 @@ box(width = 120, height = 100, depth = 140, thickness = 4, assemble = true);
 ```
 
 ![Normal closed box](https://github.com/larsch/lasercut-box-openscad/blob/master/box_normal.png)
+
+Dimensions are outer by default. Set ```inner = true``` to render a box based on inner dimensions:
+
+```scad
+include <box.scad>
+box(width = 120, height = 100, depth = 140, thickness = 4, inner = true, assemble = true);
+```
 
 Set ```assemble = false``` to render the final rendering for cutting:
 
