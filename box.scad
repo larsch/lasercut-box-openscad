@@ -21,7 +21,8 @@ module box(width, height, depth, thickness,
            hole_width = false,
            kerf = 0.0,
            labels = false,
-           explode = 0)
+           explode = 0,
+	   spacing = 0)
 {
   w = width;
   h = height;
@@ -172,7 +173,7 @@ module box(width, height, depth, thickness,
     if (dividers[0] > 0) {
       ndivs = dividers[0];
       for (i = [0 : 1 : ndivs-1])
-        translate([i*(w+e),0,0])
+        translate([i*(w+e)+spacing*(i+1),0,0])
 	  w_divider();
     }
   }
@@ -181,7 +182,7 @@ module box(width, height, depth, thickness,
     if (dividers[1] > 0) {
       ndivs = dividers[1];
       for (i = [0 : 1 : ndivs-1])
-        translate([i*(d+e),0,0])
+        translate([i*(d+e)+spacing*(i+1),0,0])
 	  h_divider();
     }
   }
@@ -189,20 +190,20 @@ module box(width, height, depth, thickness,
   // Panelized 2D rendering for cutting
   module box2d() {
     compkerf() front();
-    x1 = w + kc * 2 + e;
+    x1 = w + kc * 2 + e + spacing;
     translate([x1,0]) compkerf() back();
-    x2 = x1 + w + 2 * kc + e + ears_radius;
+    x2 = x1 + w + 2 * kc + e + ears_radius + spacing;
     translate([x2,0]) compkerf() left();
-    x3 = x2 + d + 2 * kc + e;
+    x3 = x2 + d + 2 * kc + e + spacing;
     translate([x3,0]) compkerf() right();
-    y1 = h + kc * 2 + e + ears_radius;
+    y1 = h + kc * 2 + e + ears_radius + spacing;
     x4 = 0;
     translate([x4,y1]) compkerf() bottom();
     if (keep_top) {
-      x5 = w + 2 * kc + e;
+      x5 = w + 2 * kc + e + spacing;
       translate([x5,y1]) compkerf() top();
     }
-    x6 = w + 2 * kc + (keep_top ? w+e : 0) + e;
+    x6 = w + 2 * kc + (keep_top ? w+e : 0) + e + spacing;
     translate([x6,y1]) compkerf() w_dividers();
     translate([x6+kerf,y1 + (dividers[0] > 0 ? y1 : 0)]) compkerf() h_dividers();
   }
