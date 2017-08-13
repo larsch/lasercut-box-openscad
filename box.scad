@@ -159,6 +159,7 @@ module box(width, height, depth, thickness,
   }
 
   module h_divider3d() {
+    translate([0,0,explode > e && dividers[0] > 0 ? h + explode : explode])
     if (dividers[1] > 0) {
       ndivs = dividers[1];
       for (i = [1 : 1 : ndivs])
