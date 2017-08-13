@@ -149,9 +149,9 @@ module box(width, height, depth, thickness,
 
   module w_divider3d() {
     if (dividers[0] > 0) {
-      ndivs = dividers[0]+1;
-      for (i = [d/ndivs : d/ndivs : d-d/ndivs])
-        translate([0,i+t/2,0])
+      ndivs = dividers[0];
+      for (i = [ 1 : 1 : ndivs ])
+        translate([0, d/(ndivs+1)*i+t/2,0])
 	  rotate(90, [1,0,0])
 	  panelize(w,h, "Divider", w_divider_color)
 	  w_divider();
@@ -160,9 +160,9 @@ module box(width, height, depth, thickness,
 
   module h_divider3d() {
     if (dividers[1] > 0) {
-      ndivs = dividers[1]+1;
-      for (i = [w/ndivs : w/ndivs : w-w/ndivs])
-        translate([i-t/2,0,0])
+      ndivs = dividers[1];
+      for (i = [1 : 1 : ndivs])
+        translate([w/(ndivs+1)*i-t/2,0,0])
 	  rotate(90, [1,0,0])
 	  rotate(90, [0,1,0])
 	  panelize(d,h, "Divider", h_divider_color)
@@ -231,9 +231,9 @@ module box(width, height, depth, thickness,
       movecutsleft(w, h) cuts(h);
       movecutsright(w, h) cuts(h);
       if (dividers[1] > 0) {
-        ndivs = dividers[1]+1;
-        for (i = [w/ndivs : w/ndivs : w-w/ndivs])
-          movecuts(i-t/2, 0) cuts(h, li = thickness*2);
+        ndivs = dividers[1];
+	for (i = [1 : 1 : ndivs])
+          movecuts(w/(ndivs+1)*i-t/2, 0) cuts(h, li = thickness*2);
       }
       holecuts();
     }
@@ -245,9 +245,9 @@ module box(width, height, depth, thickness,
       movecutsleft(w, h) invcuts(h, ri = thickness*2);
       movecutsright(w, h) invcuts(h, li = thickness*2);
       if (dividers[1] > 0) {
-        ndivs = dividers[1]+1;
-        for (i = [w/ndivs : w/ndivs : w-w/ndivs])
-          movecuts(i-t/2, h/2) square([h / 2, thickness]);
+        ndivs = dividers[1];
+	for (i = [1 : 1 : ndivs])
+          movecuts(w/(ndivs+1)*i-t/2, h/2) square([h / 2, thickness]);
       }
       holecuts();
     }
@@ -259,9 +259,9 @@ module box(width, height, depth, thickness,
       movecutsleft(d, h) invcuts(h, ri = thickness*2);
       movecutsright(d, h) invcuts(h, li = thickness*2);
       if (dividers[0] > 0) {
-        ndivs = dividers[0]+1;
-        for (i = [d/ndivs : d/ndivs : d-d/ndivs])
-          movecuts(i-t/2, 0) square([h / 2, thickness]);
+        ndivs = dividers[0];
+	for (i = [1 : 1 : ndivs])
+          movecuts(d/(ndivs+1)*i-t/2, 0) square([h / 2, thickness]);
       }
       holecuts();
     }
@@ -285,9 +285,9 @@ module box(width, height, depth, thickness,
       movecutsleft(d, h) invcuts(h);
       movecutsright(d, h) invcuts(h);
       if (dividers[0] > 0) {
-        ndivs = dividers[0]+1;
-        for (i = [d/ndivs : d/ndivs : d-d/ndivs])
-          movecuts(i-t/2, 0) cuts(h, li = thickness*2);
+        ndivs = dividers[0];
+        for (i = [1 : 1 : ndivs])
+          movecuts(d/(ndivs+1)*i-t/2, 0) cuts(h, li = thickness*2);
       }
     }
   }
