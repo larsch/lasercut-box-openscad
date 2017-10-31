@@ -39,7 +39,7 @@ include <box.scad>
 box(width = 120, height = 100, depth = 140, thickness = 4, assemble = true);
 ```
 
-![Normal closed box](https://github.com/larsch/lasercut-box-openscad/blob/master/box_normal.png)
+![Normal closed box](examples/box_normal.png)
 
 Dimensions are outer by default. Set ```inner = true``` to render a box based on inner dimensions:
 
@@ -50,19 +50,19 @@ box(width = 120, height = 100, depth = 140, thickness = 4, inner = true, assembl
 
 Set ```assemble = false``` to render the final rendering for cutting:
 
-![Rendering](https://github.com/larsch/lasercut-box-openscad/blob/master/box_normal_cut.png)
+![Rendering](examples/box_normal_cut.png)
 
 Another example with open top and handles:
 
-![Open box with handles](https://github.com/larsch/lasercut-box-openscad/blob/master/box_open_handles.png)
+![Open box with handles](examples/box_open_handles.png)
 
 You can use another box as a lid:
 
-![Box With lid](https://github.com/larsch/lasercut-box-openscad/blob/master/box_with_lid.png)
+![Box With lid](examples/box_with_lid.png)
 
 The target finger size can be adjusted using the ```finger_width``` option, but it will be adjusted depending on the box dimensions:
 
-![Dynamic finger adjustment](https://github.com/larsch/lasercut-box-openscad/blob/master/anim.gif)
+![Dynamic finger adjustment](anim.gif)
 
 ## License
 
