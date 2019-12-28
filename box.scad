@@ -57,12 +57,12 @@ module box(width, height, depth, thickness,
   module bottom() { cut_bottom() panel2d(w, d); }
   module ears_outer(is_front) {
     translate([is_front ? 0 : w, h]) 
-      circle(ears_radius, [0, 0]);
+      circle(ears_radius);
   }
   module ears_inner(is_front) {
     translate([is_front ? 0 : w, h])
       difference() {
-      circle(ears_radius-ears_width, [0, 0]);
+      circle(ears_radius-ears_width);
       square([t, t]);
     }
   }
