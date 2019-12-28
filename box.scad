@@ -18,6 +18,7 @@ module box(width, height, depth, thickness,
            holes = [],
            hole_dia = 0,
            ears = 0,
+           robust_ears = false,
            assemble = false,
            hole_width = false,
            kerf = 0.0,
@@ -46,9 +47,15 @@ module box(width, height, depth, thickness,
   module top() { 
     if (ears_radius > 0) {
       difference() {
-        panel2d(w, d);
-        translate([t, d-t+e]) panel2d(2*t, t);
-        translate([t, -e]) panel2d(2*t, t);
+        if (robust_ears) {
+          panel2d(w+t, d);
+          translate([2*t, d-t+e]) panel2d(2*t, t);
+          translate([2*t, -e]) panel2d(2*t, t);
+        } else {
+          panel2d(w, d);
+          translate([t, d-t+e]) panel2d(2*t, t);
+          translate([t, -e]) panel2d(2*t, t);
+        }
       }
     } else {
       cut_top() panel2d(w, d);
@@ -205,7 +212,7 @@ module box(width, height, depth, thickness,
       x5 = w + 2 * kc + e + spacing;
       translate([x5,y1]) compkerf() top();
     }
-    x6 = w + 2 * kc + (keep_top ? w+e : 0) + e + spacing;
+    x6 = w + 2 * kc + (keep_top ? w+e : 0) + e + spacing + (robust_ears ? t : 0);
     translate([x6,y1]) compkerf() w_dividers();
     translate([x6+kerf,y1 + (dividers[0] > 0 ? y1 : 0)]) compkerf() h_dividers();
   }
