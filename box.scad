@@ -13,6 +13,7 @@ module box(width, height, depth, thickness,
            finger_margin, // (default = 2 * thickness)
            inner = false,
            open = false,
+           open_bottom = false,
            inset = 0,
            dividers = [ 0, 0 ],
            holes = [],
@@ -33,6 +34,7 @@ module box(width, height, depth, thickness,
   fm = (finger_margin == undef) ? thickness * 2 : finger_margin;
   fw = (finger_width == undef) ? thickness * 2 : finger_width;
   keep_top = !open;
+  keep_bottom = !open_bottom;
   kc = kerf / 2;
   ears_radius = ears;
   ears_width = 3;
@@ -199,8 +201,10 @@ module box(width, height, depth, thickness,
     x3 = x2 + d + 2 * kc + e + spacing;
     translate([x3,0]) compkerf() right();
     y1 = h + kc * 2 + e + ears_radius + spacing;
-    x4 = 0;
-    translate([x4,y1]) compkerf() bottom();
+    if (keep_bottom) {
+      x4 = 0;
+      translate([x4,y1]) compkerf() bottom();
+    }
     if (keep_top) {
       x5 = w + 2 * kc + e + spacing;
       translate([x5,y1]) compkerf() top();
@@ -214,7 +218,8 @@ module box(width, height, depth, thickness,
   module box3d() {
     front3d(w, h, d);
     back3d(w, h, d);
-    translate([0,0,inset]) bottom3d();
+    if (keep_bottom)
+      translate([0,0,inset]) bottom3d();
     if (keep_top)
       top3d();
     left3d();
@@ -227,7 +232,7 @@ module box(width, height, depth, thickness,
   module cut_front() {
     difference() {
       children();
-      translate([0,inset]) cuts(w);
+      if (keep_bottom) translate([0,inset]) cuts(w);
       if (keep_top && (ears_radius == 0)) movecutstop(w, h) cuts(w);
       movecutsleft(w, h) cuts(h);
       movecutsright(w, h) cuts(h);
@@ -281,7 +286,7 @@ module box(width, height, depth, thickness,
   module cut_left() {
     difference() {
       children();
-      translate([t,inset]) cuts(d-2*t);
+      if (keep_bottom) translate([t,inset]) cuts(d-2*t);
       if (keep_top && (ears_radius == 0)) movecutstop(d, h) translate([t,0]) cuts(d-2*t);
       movecutsleft(d, h) invcuts(h);
       movecutsright(d, h) invcuts(h);

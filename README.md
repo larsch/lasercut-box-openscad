@@ -21,6 +21,7 @@ box(options);
  * finger_width (length) - target finger width
  * finger_margin (length) - distance from inside edge to first finger
  * open (boolean) - Removes the top
+ * open_bottom (boolean) - Removes the bottom
  * inset (length) - Amount to inset the bottom side
  * assemble (boolean) - Render assembled 3D box instead of 2D cutting plans
  * hole_width - Width of handle hole
