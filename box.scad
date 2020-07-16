@@ -216,8 +216,8 @@ module box(width, height, depth, thickness,
 
   // Assembled box in 3D
   module box3d() {
-    front3d(w, h, d);
-    back3d(w, h, d);
+    front3d();
+    back3d();
     if (keep_bottom)
       translate([0,0,inset]) bottom3d();
     if (keep_top)
