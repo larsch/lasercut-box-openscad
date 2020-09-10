@@ -19,7 +19,7 @@ module box(width, height, depth, thickness,
            ears = 0,
            assemble = false,
            hole_width = false,
-           kerf = 0.0,
+           kerf = 0.07,
            labels = false,
            explode = 0)
 {
