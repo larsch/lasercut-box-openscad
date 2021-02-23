@@ -1,3 +1,5 @@
+// vim:ts=2:sw=2:sws=2:et:ai
+
 w_divider_color = "CadetBlue";
 h_divider_color = "CornflowerBlue";
 front_color = "RoyalBlue";
