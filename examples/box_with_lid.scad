@@ -11,8 +11,7 @@ if (assemble) {
      translate([-extra, -extra, height - 4 * thickness]) lid();
 } else {
      the_box();
-     translate([0,height+depth+4*kerf])
-     lid();
+     translate([0,height+depth+thickness]) lid();
 }
 
 module the_box() {
