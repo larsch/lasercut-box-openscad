@@ -47,6 +47,7 @@ module box(width, height, depth, thickness,
   module right() { cut_right() panel2d(d, h); }
   module top() { 
     if (ears_radius > 0) {
+      assert(ears_radius >= thickness*2.2, "ears are too small");
       difference() {
         panel2d(w, d);
         translate([t, d-t+e]) panel2d(2*t, t);
@@ -59,12 +60,12 @@ module box(width, height, depth, thickness,
   module bottom() { cut_bottom() panel2d(w, d); }
   module ears_outer(is_front) {
     translate([is_front ? 0 : w, h]) 
-      circle(ears_radius, [0, 0]);
+      circle(r=ears_radius);
   }
   module ears_inner(is_front) {
     translate([is_front ? 0 : w, h])
       difference() {
-      circle(ears_radius-ears_width, [0, 0]);
+      circle(r=ears_radius-ears_width);
       square([t, t]);
     }
   }
