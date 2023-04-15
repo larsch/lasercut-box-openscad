@@ -26,8 +26,9 @@ module box(width, height, depth, thickness,
            explode = 0,
            spacing = 0)
 {
+  vlayers = (open ? 0 : 1) + (open_bottom ? 0 : 1);
   w = inner ? width + 2 * thickness : width;
-  h = inner ? height + 2 * thickness : height;
+  h = inner ? height + vlayers * thickness : height;
   d = inner ? depth + 2 * thickness : depth;
   t = thickness;
   hm = h - inset;
